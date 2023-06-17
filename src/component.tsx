@@ -5,7 +5,7 @@ import isEqual from 'react-fast-compare'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-const renderBar = (barData: any, barDataEntriesKeys: any, barColor: any, setLeverage: any) => {
+const renderBar = (currentBar: any, barData: any, barDataEntriesKeys: any, barColor: any, setLeverage: any) => {
   const barArray = []
   for (let i = 0; i < barDataEntriesKeys.length; i++) {
     barArray.push(
@@ -14,6 +14,7 @@ const renderBar = (barData: any, barDataEntriesKeys: any, barColor: any, setLeve
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
+        stroke={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'red' : ''}
         fill={barData[barDataEntriesKeys[i]].color}
         onClick={() => {
           setLeverage(barData[barDataEntriesKeys[i]])
@@ -25,26 +26,35 @@ const renderBar = (barData: any, barDataEntriesKeys: any, barColor: any, setLeve
   return barArray
 }
 const StackedBarChart = ({
-  xDisplay,
-  barData,
+  leverageData,
+  bars,
   barColor,
+  currentBarData,
   height = 0,
   setBarData
 }: {
+  leverageData: any
   height?: number
-  xDisplay: string
-  barData?: {}
+  currentBarData: any
+  bars: any
   barColor?: {}
   setBarData: any
 }) => {
-  const rightPixel = xDisplay.length === 2 ? '-7px' : '-4px'
-  const barDataEntriesKeys = Object.keys(barData || [])
+  console.log({
+    bars,
+    barColor,
+    currentBarData,
+    height,
+    setBarData
+  })
+  const rightPixel = leverageData.xDisplay.length === 2 ? '-7px' : '-4px'
+  const barDataEntriesKeys = Object.keys(bars || [])
   const barColorValues = []
   const barSize = []
   const code = 'a'.charCodeAt(0)
   for (let i = 0; i < Object.keys(barColor || {}).length; i++) {
     barColorValues.push(barColor?.[String.fromCharCode(code + i)])
-    barSize.push(barData?.[String.fromCharCode(code + i)]?.size)
+    barSize.push(bars?.[String.fromCharCode(code + i)]?.size)
   }
   const barTotalSize = barSize.reduce((accumulator, value) => {
     return accumulator + value
@@ -52,17 +62,30 @@ const StackedBarChart = ({
 
   const barSizeData = useMemo(() => {
     const result = {}
-    for (const i in barData) {
-      result[i] = barData[i].size
+    for (const i in bars) {
+      result[i] = bars[i].size
     }
 
     return result
-  }, [barData])
+  }, [bars])
+
+  const selectNextBar = () => {
+    const barsArr = Object.values(bars)
+    const index = barsArr.findIndex((b: any) => {
+      return b.token === currentBarData.token
+    })
+    setBarData(barsArr[index + 1] ? barsArr[index + 1] : barsArr[0])
+  }
 
   return (
     <div style={{ position: 'relative', padding: '0' }}>
-      {xDisplay}
-      {xDisplay === '0x' ? (
+      <span
+        onClick={selectNextBar}
+        style={{ color: currentBarData.x === leverageData.x ? '#01A7FA' : '#666' }}
+      >
+        {leverageData.xDisplay}
+      </span>
+      {leverageData.xDisplay === '0x' ? (
         <div />
       ) : (
         <div
@@ -77,8 +100,13 @@ const StackedBarChart = ({
             right: rightPixel
           }}
         >
-          <BarChart className='d-flex' width={30} height={barTotalSize + (Object.values(barSizeData).length - 1) * 5} data={[barSizeData]}>
-            {renderBar(barData, barDataEntriesKeys, barColorValues, setBarData)}
+          <BarChart
+            className='d-flex'
+            width={30}
+            height={barTotalSize + (Object.values(barSizeData).length - 1) * 5}
+            data={[barSizeData]}
+          >
+            {renderBar(currentBarData, bars, barDataEntriesKeys, barColorValues, setBarData)}
           </BarChart>
         </div>
       )}
@@ -86,7 +114,19 @@ const StackedBarChart = ({
   )
 }
 
-const Component = ({ leverage, setBarData, leverageData, height }: {height: number, leverageData: any, leverage: number, setBarData: any}) => {
+const Component = (
+  {
+    setBarData,
+    barData,
+    leverageData,
+    height
+  }: {
+    height: number,
+    leverageData: any,
+    barData: any,
+    setBarData: any
+  }
+) => {
   const initToChar = (num: any) => {
     const code = 'a'.charCodeAt(0)
     return String.fromCharCode(code + num)
@@ -110,13 +150,13 @@ const Component = ({ leverage, setBarData, leverageData, height }: {height: numb
 
   const getMark = () => {
     const finalData = {}
-    // const barData = {}
     leverageData.map((data: any) => {
       finalData[data.x] = (
         <StackedBarChart
           height={height}
-          xDisplay={data.xDisplay}
-          barData={getBarData(data.bars)}
+          leverageData={data}
+          currentBarData={barData}
+          bars={getBarData(data.bars)}
           barColor={getBarColor(data.bars)}
           setBarData={setBarData}
         />
@@ -127,6 +167,10 @@ const Component = ({ leverage, setBarData, leverageData, height }: {height: numb
       ...finalData
     }
   }
+
+  const leverage = useMemo(() => {
+    return barData?.x || 0
+  }, [barData])
 
   useEffect(() => {
     if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
@@ -142,15 +186,6 @@ const Component = ({ leverage, setBarData, leverageData, height }: {height: numb
         step={null}
         count={1}
         value={leverage}
-        onChange={(e: number) => {
-          const data = leverageData.find((d: any) => {
-            return d.x === e
-          })
-
-          if (data?.bars[0]) {
-            setBarData(data.bars[0])
-          }
-        }}
         dotStyle={{
           background: '#303236',
           borderRadius: '2px',

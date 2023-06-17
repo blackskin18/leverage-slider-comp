@@ -87,6 +87,7 @@ export const AppLayout = (props: any) => {
             <LeverageSlider
               leverage={leverage}
               setBarData={setBarData}
+              barData={barData}
               leverageData={LEVERAGE_DATA}
               height={100}
             />
