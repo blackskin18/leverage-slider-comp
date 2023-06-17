@@ -27,8 +27,6 @@ const renderBar = (currentBar: any, barData: any, barDataEntriesKeys: any, barCo
 }
 const StackedBarChart = ({
   leverageData,
-  bars,
-  barColor,
   currentBarData,
   height = 0,
   setBarData
@@ -36,25 +34,23 @@ const StackedBarChart = ({
   leverageData: any
   height?: number
   currentBarData: any
-  bars: any
-  barColor?: {}
   setBarData: any
 }) => {
-  console.log({
-    bars,
-    barColor,
-    currentBarData,
-    height,
-    setBarData
-  })
+  const bars = useMemo(() => {
+    const barData = {}
+    for (let i = 0; i < leverageData.bars.length; i++) {
+      barData[i] = leverageData.bars[i]
+    }
+    return barData
+  }, [leverageData.bars])
+
   const rightPixel = leverageData.xDisplay.length === 2 ? '-7px' : '-4px'
   const barDataEntriesKeys = Object.keys(bars || [])
   const barColorValues = []
   const barSize = []
-  const code = 'a'.charCodeAt(0)
-  for (let i = 0; i < Object.keys(barColor || {}).length; i++) {
-    barColorValues.push(barColor?.[String.fromCharCode(code + i)])
-    barSize.push(bars?.[String.fromCharCode(code + i)]?.size)
+  for (const i in bars) {
+    barColorValues.push(bars[i].color)
+    barSize.push(bars[i].size)
   }
   const barTotalSize = barSize.reduce((accumulator, value) => {
     return accumulator + value
@@ -127,27 +123,6 @@ const Component = (
     setBarData: any
   }
 ) => {
-  const initToChar = (num: any) => {
-    const code = 'a'.charCodeAt(0)
-    return String.fromCharCode(code + num)
-  }
-
-  const getBarColor = (data: any) => {
-    const barColor = {}
-    for (let i = 0; i < data.length; i++) {
-      barColor[initToChar(i)] = data[i].color
-    }
-    return barColor
-  }
-
-  const getBarData = (data: any) => {
-    const barData = {}
-    for (let i = 0; i < data.length; i++) {
-      barData[initToChar(i)] = data[i]
-    }
-    return barData
-  }
-
   const getMark = () => {
     const finalData = {}
     leverageData.map((data: any) => {
@@ -156,8 +131,6 @@ const Component = (
           height={height}
           leverageData={data}
           currentBarData={barData}
-          bars={getBarData(data.bars)}
-          barColor={getBarColor(data.bars)}
           setBarData={setBarData}
         />
       )
@@ -184,6 +157,14 @@ const Component = (
         min={leverageData[0].x}
         max={leverageData[leverageData.length - 1].x}
         step={null}
+        onChange={(e: number) => {
+          const data = leverageData.find((d: any) => {
+            return d.x === e
+          })
+          if (data?.bars[0]) {
+            setBarData(data.bars[0])
+          }
+        }}
         count={1}
         value={leverage}
         dotStyle={{
