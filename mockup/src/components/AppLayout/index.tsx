@@ -3,7 +3,9 @@ import './style.scss'
 import '../../styles/main.scss'
 import 'web3-react-modal/dist/index.css'
 import { BlurBackground } from '../BlurBackground'
-import { bn } from 'derivable-tools/dist/utils/helper'
+import { BigNumber } from 'ethers'
+
+const bn = BigNumber.from
 
 const LEVERAGE_DATA = [
   {
