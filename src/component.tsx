@@ -5,7 +5,13 @@ import isEqual from 'react-fast-compare'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-const renderBar = (currentBar: any, barData: any, barDataEntriesKeys: any, barColor: any, setLeverage: any) => {
+const renderBar = (
+  currentBar: any,
+  barData: any,
+  barDataEntriesKeys: any,
+  barColor: any,
+  setBarData: any
+) => {
   const barArray = []
   for (let i = 0; i < barDataEntriesKeys.length; i++) {
     barArray.push(
@@ -14,10 +20,12 @@ const renderBar = (currentBar: any, barData: any, barDataEntriesKeys: any, barCo
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
-        stroke={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'red' : ''}
+        stroke={
+          currentBar.token === barData[barDataEntriesKeys[i]].token ? 'red' : ''
+        }
         fill={barData[barDataEntriesKeys[i]].color}
         onClick={() => {
-          setLeverage(barData[barDataEntriesKeys[i]])
+          setBarData(barData[barDataEntriesKeys[i]])
         }}
       />
     )
@@ -25,6 +33,7 @@ const renderBar = (currentBar: any, barData: any, barDataEntriesKeys: any, barCo
 
   return barArray
 }
+
 const StackedBarChart = ({
   leverageData,
   currentBarData,
@@ -45,6 +54,8 @@ const StackedBarChart = ({
   }, [leverageData.bars])
 
   const rightPixel = leverageData.xDisplay.length === 2 ? '-7px' : '-4px'
+
+  // get color, bar size of each bar in current leverage
   const barDataEntriesKeys = Object.keys(bars || [])
   const barColorValues = []
   const barSize = []
@@ -52,10 +63,13 @@ const StackedBarChart = ({
     barColorValues.push(bars[i].color)
     barSize.push(bars[i].size)
   }
+
+  // calculate total height of bar in each leverage
   const barTotalSize = barSize.reduce((accumulator, value) => {
     return accumulator + value
   }, 0)
 
+  // get height of each bar in current leverage
   const barSizeData = useMemo(() => {
     const result = {}
     for (const i in bars) {
@@ -77,7 +91,9 @@ const StackedBarChart = ({
     <div style={{ position: 'relative', padding: '0' }}>
       <span
         onClick={selectNextBar}
-        style={{ color: currentBarData.x === leverageData.x ? '#01A7FA' : '#666' }}
+        style={{
+          color: currentBarData.x === leverageData.x ? '#01A7FA' : '#666'
+        }}
       >
         {leverageData.xDisplay}
       </span>
@@ -90,8 +106,12 @@ const StackedBarChart = ({
             position: 'absolute',
             top: `${
               barTotalSize === 100
-                ? `-${height + 30}px`
-                : `-${height + 30 - (100 - barTotalSize)}px`
+                ? `-${100 + 30}px`
+                : `-${
+                    100 +
+                    30 -
+                    (100 - barTotalSize * (height > 100 ? height / 100 : 1))
+                  }px`
             }`,
             right: rightPixel
           }}
@@ -99,10 +119,19 @@ const StackedBarChart = ({
           <BarChart
             className='d-flex'
             width={30}
-            height={barTotalSize + (Object.values(barSizeData).length - 1) * 5}
+            height={
+              barTotalSize * (height > 100 ? height / 100 : 1) +
+              (Object.values(barSizeData).length - 1)
+            } // ?
             data={[barSizeData]}
           >
-            {renderBar(currentBarData, bars, barDataEntriesKeys, barColorValues, setBarData)}
+            {renderBar(
+              currentBarData,
+              bars,
+              barDataEntriesKeys,
+              barColorValues,
+              setBarData
+            )}
           </BarChart>
         </div>
       )}
@@ -110,19 +139,18 @@ const StackedBarChart = ({
   )
 }
 
-const Component = (
-  {
-    setBarData,
-    barData,
-    leverageData,
-    height
-  }: {
-    height: number,
-    leverageData: any,
-    barData: any,
-    setBarData: any
-  }
-) => {
+const Component = ({
+  setBarData,
+  barData,
+  leverageData,
+  height
+}: {
+  height: number
+  leverageData: any
+  barData: any
+  setBarData: any
+}) => {
+  // Return stacked bar chart of each leverage
   const getMark = () => {
     const finalData = {}
     leverageData.map((data: any) => {
@@ -145,6 +173,7 @@ const Component = (
     return barData?.x || 0
   }, [barData])
 
+  // Default selected bar is LEVERAGE_DATA[0].bars[0]
   useEffect(() => {
     if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
       setBarData(leverageData[0].bars[0])
@@ -152,19 +181,27 @@ const Component = (
   }, [leverage])
 
   return (
-    <div style={{ marginTop: height + 30, marginBottom: 35, paddingRight: 15, paddingLeft: 15 }}>
+    <div
+      style={{
+        marginTop: height + 30,
+        marginBottom: 35,
+        paddingRight: 15,
+        paddingLeft: 15
+      }}
+    >
       <Slider
         min={leverageData[0].x}
         max={leverageData[leverageData.length - 1].x}
         step={null}
-        onChange={(e: number) => {
-          const data = leverageData.find((d: any) => {
-            return d.x === e
-          })
-          if (data?.bars[0]) {
-            setBarData(data.bars[0])
-          }
-        }}
+        // Fix clicking bar select the wrong pool check
+        // onChange={(e: number) => {
+        //   const data = leverageData.find((d: any) => {
+        //     return d.x === e
+        //   })
+        //   // if (data?.bars[0]) {
+        //   //   setBarData(data.bars[0])
+        //   // }
+        // }}
         count={1}
         value={leverage}
         dotStyle={{
