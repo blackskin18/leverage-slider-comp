@@ -21,7 +21,7 @@ const renderBar = (
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
         stroke={
-          currentBar.token === barData[barDataEntriesKeys[i]].token ? 'red' : ''
+          currentBar.token === barData[barDataEntriesKeys[i]].token ? 'white' : ''
         }
         fill={barData[barDataEntriesKeys[i]].color}
         onClick={() => {
