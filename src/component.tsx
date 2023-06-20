@@ -190,8 +190,8 @@ const Component = ({
       }}
     >
       <Slider
-        min={leverageData[0].x}
-        max={leverageData[leverageData.length - 1].x}
+        min={leverageData && leverageData[0] ? leverageData[0].x : 0}
+        max={leverageData[leverageData.length - 1]?.x}
         step={null}
         // Fix clicking bar select the wrong pool check
         // onChange={(e: number) => {
