@@ -16,13 +16,19 @@ const renderBar = (
   for (let i = 0; i < barDataEntriesKeys.length; i++) {
     barArray.push(
       <Bar
-        style={{ transform: `translateY(-${5 * i}px)` }}
+        className={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'glowing-btn' : ''}
+        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer' }}
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
         stroke={
           currentBar.token === barData[barDataEntriesKeys[i]].token ? 'white' : ''
         }
+        strokeWidth={2}
+        isAnimationActive
+        animationBegin={0}
+        animationDuration={1000}
+        animationEasing='ease-in-out'
         fill={barData[barDataEntriesKeys[i]].color}
         onClick={() => {
           setBarData(barData[barDataEntriesKeys[i]])
@@ -91,8 +97,11 @@ const StackedBarChart = ({
     <div style={{ position: 'relative', padding: '0' }}>
       <span
         onClick={selectNextBar}
+        // style={{
+        //   color: currentBarData.x === leverageData.x ? '#01A7FA' : '#666'
+        // }}
         style={{
-          color: currentBarData.x === leverageData.x ? '#01A7FA' : '#666'
+          color: '#666'
         }}
       >
         {leverageData.xDisplay}
@@ -169,17 +178,23 @@ const Component = ({
     }
   }
 
+  // Handle select bar by click on dot mark in slider
+  const selectDotMarkHandler = (value: any) => {
+    // still in process to check select the wrong pool check
+    const selectedBar = leverageData.find((data: any) => data.x === value)
+    setBarData(selectedBar.bars[0])
+  }
+
   const leverage = useMemo(() => {
     return barData?.x || 0
   }, [barData])
 
-  // Default selected bar is LEVERAGE_DATA[0].bars[0]
+  // Default selected bar is LEVERAGE_DATA[0].bars[0]x
   useEffect(() => {
     if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
       setBarData(leverageData[0].bars[0])
     }
   }, [leverage])
-
   return (
     <div
       style={{
@@ -193,6 +208,8 @@ const Component = ({
         min={leverageData && leverageData[0] ? leverageData[0].x : 0}
         max={leverageData[leverageData.length - 1]?.x}
         step={null}
+        // onChange={selectDotMarkHandler}
+        // included={false}
         // Fix clicking bar select the wrong pool check
         // onChange={(e: number) => {
         //   const data = leverageData.find((d: any) => {
