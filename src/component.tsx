@@ -21,10 +21,10 @@ const renderBar = (
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
-        stroke={
-          currentBar.token === barData[barDataEntriesKeys[i]].token ? 'white' : ''
-        }
-        strokeWidth={2}
+        // stroke={
+        //   currentBar.token === barData[barDataEntriesKeys[i]].token ? 'white' : ''
+        // }
+        // strokeWidth={2}
         isAnimationActive
         animationBegin={0}
         animationDuration={1000}
@@ -207,7 +207,7 @@ const Component = ({
       <Slider
         min={leverageData && leverageData[0] ? leverageData[0].x : 0}
         max={leverageData[leverageData.length - 1]?.x}
-        step={null}
+        step={1}
         // onChange={selectDotMarkHandler}
         // included={false}
         // Fix clicking bar select the wrong pool check
@@ -220,7 +220,7 @@ const Component = ({
         //   // }
         // }}
         count={1}
-        value={leverage}
+        // value={leverage}
         dotStyle={{
           background: '#303236',
           borderRadius: '2px',

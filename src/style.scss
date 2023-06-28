@@ -6,14 +6,8 @@
   //   outline: none;
   //   border-color: #9ecaed;
   //   box-shadow: 0 0 10px #9ecaed;
-  animation: border-flicker 2s linear infinite;
-}
-
-@keyframes border-flicker {
-  70% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-  }
+  //   fill-opacity: 0;
+  stroke: #fff;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 2px #fff);
 }
