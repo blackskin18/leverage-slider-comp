@@ -103,6 +103,7 @@ const StackedBarChart = ({
         style={{
           color: '#666'
         }}
+        className='label'
       >
         {leverageData.xDisplay}
       </span>
@@ -197,6 +198,7 @@ const Component = ({
   }, [leverage])
   return (
     <div
+      className='leverage-slider'
       style={{
         marginTop: height + 30,
         marginBottom: 35,

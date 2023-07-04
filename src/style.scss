@@ -11,3 +11,12 @@
   stroke-width: 2;
   filter: drop-shadow(0 0 2px #fff);
 }
+
+.leverage-slider {
+  .label {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+}
+
