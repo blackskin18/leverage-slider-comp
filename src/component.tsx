@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { BarChart, Bar } from 'recharts'
 import './/style.scss'
 import isEqual from 'react-fast-compare'
@@ -160,6 +160,7 @@ const Component = ({
   barData: any
   setBarData: any
 }) => {
+  const [x, setX] = useState(barData.x)
   // Return stacked bar chart of each leverage
   const getMark = () => {
     const finalData = {}
@@ -179,11 +180,18 @@ const Component = ({
     }
   }
 
-  // Handle select bar by click on dot mark in slider
   const selectDotMarkHandler = (value: any) => {
-    // still in process to check select the wrong pool check
-    const selectedBar = leverageData.find((data: any) => data.x === value)
-    setBarData(selectedBar.bars[0])
+    let result = leverageData[0]
+    let min = value
+    leverageData.forEach((data: any) => {
+      if (Math.abs(data.x - value) < min) {
+        result = data
+        min = Math.abs(data.x - value)
+        console.log(data.x, value, min)
+      }
+    })
+    setBarData(result.bars[0])
+    setX(result.x)
   }
 
   const leverage = useMemo(() => {
@@ -210,7 +218,14 @@ const Component = ({
         min={leverageData && leverageData[0] ? leverageData[0].x : 0}
         max={leverageData[leverageData.length - 1]?.x}
         step={1}
-        // onChange={selectDotMarkHandler}
+        value={x}
+        onChange={(e) => {
+          console.log(e)
+          setX(e)
+        }}
+        onAfterChange={(value) => {
+          selectDotMarkHandler(value)
+        }}
         // included={false}
         // Fix clicking bar select the wrong pool check
         // onChange={(e: number) => {
