@@ -202,6 +202,7 @@ const Component = ({
   useEffect(() => {
     if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
       setBarData(leverageData[0].bars[0])
+      setX(leverageData[0].bars[0].x)
     }
   }, [leverage])
   return (
