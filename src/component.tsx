@@ -118,10 +118,10 @@ const StackedBarChart = ({
               barTotalSize === 100
                 ? `-${100 + 30}px`
                 : `-${
-                    100 +
-                    30 -
-                    (100 - barTotalSize * (height > 100 ? height / 100 : 1))
-                  }px`
+                  100 +
+                  30 -
+                  (100 - barTotalSize * (height > 100 ? height / 100 : 1))
+                }px`
             }`,
             right: rightPixel
           }}
@@ -191,21 +191,28 @@ const Component = ({
     })
     if (result.bars[0].x !== barData.x) {
       setBarData(result.bars[0])
-      setX(result.x)
     }
+    setX(result.x)
   }
 
-  const leverage = useMemo(() => {
-    return barData?.x || 0
-  }, [barData])
-
-  // Default selected bar is LEVERAGE_DATA[0].bars[0]x
   useEffect(() => {
-    if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
+    if (leverageData && leverageData.length > 0 && leverageData[0].bars.length > 0) {
       setBarData(leverageData[0].bars[0])
       setX(leverageData[0].bars[0].x)
     }
-  }, [leverage])
+  }, [leverageData])
+
+  // const leverage = useMemo(() => {
+  //   return barData?.x || 0
+  // }, [barData])
+
+  // Default selected bar is LEVERAGE_DATA[0].bars[0]x
+  // useEffect(() => {
+  //   if (leverage === 0 && leverageData && leverageData[0]?.bars.length > 0) {
+  //     setBarData(leverageData[0].bars[0])
+  //     setX(leverageData[0].bars[0].x)
+  //   }
+  // }, [leverage])
   return (
     <div
       className='leverage-slider'
