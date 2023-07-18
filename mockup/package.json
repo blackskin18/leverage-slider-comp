@@ -31,7 +31,7 @@
     "url": "^0.11.0",
     "ethers": "^5.5.4",
     "web-vitals": "^2.1.4",
-    "web3-react-modal": "https://github.com/ezDeFi/web3-react-modal.git#main"
+    "web3-react-modal": "git+ssh://git@github.com:derivable-labs/web3-react-modal.git#bc1e9c1eb19e9edff3cf6d57e18b29aea858fcbc"
   },
   "devDependencies": {
     "assert": "^2.0.0",

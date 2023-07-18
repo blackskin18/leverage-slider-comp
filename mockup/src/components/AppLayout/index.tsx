@@ -91,6 +91,11 @@ export const AppLayout = (props: any) => {
 
   return (
     <div className={`body dark'}`}>
+      <button onClick={() => {
+        setBarData({})
+      }}>
+        test
+      </button>
       <BlurBackground pointNumber={20}>
         <section
           className='layout'

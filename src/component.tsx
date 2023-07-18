@@ -187,11 +187,12 @@ const Component = ({
       if (Math.abs(data.x - value) < min) {
         result = data
         min = Math.abs(data.x - value)
-        console.log(data.x, value, min)
       }
     })
-    setBarData(result.bars[0])
-    setX(result.x)
+    if (result.bars[0].x !== barData.x) {
+      setBarData(result.bars[0])
+      setX(result.x)
+    }
   }
 
   const leverage = useMemo(() => {
@@ -221,7 +222,6 @@ const Component = ({
         step={1}
         value={x}
         onChange={(e) => {
-          console.log(e)
           setX(e)
         }}
         onAfterChange={(value) => {
