@@ -18,14 +18,16 @@ const LEVERAGE_DATA = [
         token: '0x767311aeb1818218E25655aeEE096982bb690013-16',
         size: 69.36,
         color: '#01A7FA',
-        reserve: bn('0x360d7792eba77258')
+        reserve: bn('0x360d7792eba77258'),
+        opacity: 0.1
       },
       {
         x: 5,
         token: '0x7c4a2262C23fCc45e102BD8D0fA3541Ec544e59E-16',
         size: 30.63,
         color: '#FF98E5',
-        reserve: bn('0x17deb0937bc9efdb')
+        reserve: bn('0x17deb0937bc9efdb'),
+        opacity: 0.9
       }
     ]
   },
@@ -39,7 +41,8 @@ const LEVERAGE_DATA = [
         token: '0x086D9928f862C95359C6624B74e4fEf3a9e79a74-16',
         size: 30.89,
         color: '#01A7FA',
-        reserve: bn('0x1813e2fe4ba5869a')
+        reserve: bn('0x1813e2fe4ba5869a'),
+        opacity: 0
       },
       {
         x: 9,

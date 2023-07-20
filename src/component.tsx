@@ -17,7 +17,7 @@ const renderBar = (
     barArray.push(
       <Bar
         className={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'glowing-btn' : ''}
-        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer' }}
+        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer', opacity: `${barData[barDataEntriesKeys[i]].opacity}` }}
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
