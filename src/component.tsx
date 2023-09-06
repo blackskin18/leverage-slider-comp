@@ -25,13 +25,14 @@ const renderBar = (
         //   currentBar.token === barData[barDataEntriesKeys[i]].token ? 'white' : ''
         // }
         // strokeWidth={2}
+        id={`${i}`}
         isAnimationActive
         animationBegin={0}
         animationDuration={1000}
         animationEasing='ease-in-out'
         fill={barData[barDataEntriesKeys[i]].color}
-        onClick={() => {
-          setBarData(barData[barDataEntriesKeys[i]])
+        onClick={(e) => {
+          setBarData(barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
         }}
       />
     )
@@ -189,7 +190,7 @@ const Component = ({
         min = Math.abs(data.x - value)
       }
     })
-    if (result.bars[0].x !== barData.x) {
+    if (result.bars[0].x !== barData.x && result.bars.length < 2) {
       setBarData(result.bars[0])
     }
     setX(result.x)
