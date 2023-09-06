@@ -4,7 +4,15 @@ import './/style.scss'
 import isEqual from 'react-fast-compare'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
-
+const applyOpacityToColor = (color:string, opacity:number) => {
+  const colorWithoutHash = color.replace('#', '')
+  const red = parseInt(colorWithoutHash.slice(0, 2), 16)
+  const green = parseInt(colorWithoutHash.slice(2, 4), 16)
+  const blue = parseInt(colorWithoutHash.slice(4, 6), 16)
+  opacity = Math.min(1, Math.max(0, opacity))
+  const rgbaColor = `rgba(${red}, ${green}, ${blue}, ${opacity})`
+  return rgbaColor
+}
 const renderBar = (
   currentBar: any,
   barData: any,
@@ -17,7 +25,7 @@ const renderBar = (
     barArray.push(
       <Bar
         className={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'glowing-btn' : ''}
-        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer', opacity: `${barData[barDataEntriesKeys[i]].opacity}` }}
+        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer' }}
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
@@ -30,8 +38,9 @@ const renderBar = (
         animationBegin={0}
         animationDuration={1000}
         animationEasing='ease-in-out'
-        fill={barData[barDataEntriesKeys[i]].color}
+        fill={applyOpacityToColor(barData[barDataEntriesKeys[i]].color, barData[barDataEntriesKeys[i]].opacity || 1)}
         onClick={(e) => {
+          console.log('vinh', barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
           setBarData(barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
         }}
       />
@@ -124,7 +133,7 @@ const StackedBarChart = ({
                   (100 - barTotalSize * (height > 100 ? height / 100 : 1))
                 }px`
             }`,
-            right: rightPixel
+            right: rightPixel,
           }}
         >
           <BarChart

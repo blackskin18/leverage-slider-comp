@@ -16,7 +16,7 @@ const LEVERAGE_DATA = [
       {
         x: 5,
         token: '0x767311aeb1818218E25655aeEE096982bb690013-16',
-        size: 69.36,
+        size: 0,
         color: '#01A7FA',
         reserve: bn('0x360d7792eba77258'),
         opacity: 0.1
@@ -27,7 +27,7 @@ const LEVERAGE_DATA = [
         size: 30.63,
         color: '#FF98E5',
         reserve: bn('0x17deb0937bc9efdb'),
-        opacity: 0.9
+        opacity: 0.1
       }
     ]
   },
@@ -42,7 +42,7 @@ const LEVERAGE_DATA = [
         size: 30.89,
         color: '#01A7FA',
         reserve: bn('0x1813e2fe4ba5869a'),
-        opacity: 0
+        opacity: 0.3
       },
       {
         x: 9,
