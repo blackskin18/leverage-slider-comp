@@ -89,7 +89,7 @@ const StackedBarChart = ({
   const barSizeData = useMemo(() => {
     const result = {}
     for (const i in bars) {
-      result[i] = bars[i].size
+      result[i] = (bars[i].size as Number).toFixed(4) === (0).toFixed(4) ? 0.00001 : bars[i].size
     }
 
     return result
