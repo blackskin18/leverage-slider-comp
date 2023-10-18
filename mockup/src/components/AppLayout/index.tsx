@@ -9,25 +9,25 @@ const bn = BigNumber.from
 
 const LEVERAGE_DATA = [
   {
-    x: 5,
-    xDisplay: '5x',
+    x: 4,
+    xDisplay: '4x',
     totalSize: bn('0x4dec282667716233'),
     bars: [
       {
-        x: 5,
+        x: 4,
         token: '0x767311aeb1818218E25655aeEE096982bb690013-16',
-        size: 0,
+        size: 1.5,
         color: '#01A7FA',
         reserve: bn('0x360d7792eba77258'),
-        opacity: 0.1
+        opacity: 0.050000000000000044
       },
       {
-        x: 5,
-        token: '0x7c4a2262C23fCc45e102BD8D0fA3541Ec544e59E-16',
-        size: 30.63,
-        color: '#FF98E5',
-        reserve: bn('0x17deb0937bc9efdb'),
-        opacity: 0.1
+        x: 4,
+        token: '0x767311ceb1818218E25655aeEE096982bb690013-16',
+        size: 4.5,
+        color: '#01A7FA',
+        reserve: bn('0x360d7792eba77258'),
+        opacity: 0.050000000000000044
       }
     ]
   },

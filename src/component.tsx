@@ -40,7 +40,6 @@ const renderBar = (
         animationEasing='ease-in-out'
         fill={applyOpacityToColor(barData[barDataEntriesKeys[i]].color, barData[barDataEntriesKeys[i]].opacity || 1)}
         onClick={(e) => {
-          console.log('vinh', barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
           setBarData(barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
         }}
       />
@@ -97,6 +96,7 @@ const StackedBarChart = ({
 
   const selectNextBar = () => {
     const barsArr = Object.values(bars)
+   
     const index = barsArr.findIndex((b: any) => {
       return b.token === currentBarData.token
     })
