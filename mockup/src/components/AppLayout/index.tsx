@@ -63,17 +63,18 @@ const LEVERAGE_DATA = [
         token: '0x43200e62dC33C82C0e69D355480a7140eE527088-16',
         size: 30.6,
         color: '#01A7FA',
-        reserve: bn('0x17d868afc6b2f74b')
+        reserve: bn('0x17d868afc6b2f74b'),
+        isDashed: true
       }
     ]
   },
   {
-    x: 33,
-    xDisplay: '33x',
+    x: 35,
+    xDisplay: '35x',
     totalSize: bn('0x17a38db0b0646c82'),
     bars: [
       {
-        x: 33,
+        x: 35,
         token: '0x37De2624B664e3da084F9c2177b6FCf0Fd2406de-16',
         size: 30.33,
         color: '#01A7FA',

@@ -24,8 +24,23 @@ const renderBar = (
   for (let i = 0; i < barDataEntriesKeys.length; i++) {
     barArray.push(
       <Bar
-        className={currentBar.token === barData[barDataEntriesKeys[i]].token ? 'glowing-btn' : ''}
-        style={{ transform: `translateY(-${5 * i}px)`, cursor: 'pointer' }}
+        className={
+          currentBar.token === barData[barDataEntriesKeys[i]].token
+            ? 'glowing-btn '
+            : ''
+        }
+        style={{
+          transform: `translateY(-${5 * i}px)`,
+          cursor: 'pointer',
+          border: '10px solid black',
+          ...(barData[barDataEntriesKeys[i]].isDashed
+            ? {
+                strokeDasharray: 2,
+                stroke: barData[barDataEntriesKeys[i]].color,
+                fill: 'none'
+              }
+            : {})
+        }}
         yAxisId={1000}
         dataKey={barDataEntriesKeys[i]}
         stackId='a'
@@ -38,7 +53,10 @@ const renderBar = (
         animationBegin={0}
         animationDuration={1000}
         animationEasing='ease-in-out'
-        fill={applyOpacityToColor(barData[barDataEntriesKeys[i]].color, barData[barDataEntriesKeys[i]].opacity || 1)}
+        fill={applyOpacityToColor(
+          barData[barDataEntriesKeys[i]].color,
+          barData[barDataEntriesKeys[i]].opacity || 1
+        )}
         onClick={(e) => {
           setBarData(barData[Number(e?.tooltipPayload?.[0]?.id || 0)])
         }}
@@ -88,7 +106,10 @@ const StackedBarChart = ({
   const barSizeData = useMemo(() => {
     const result = {}
     for (const i in bars) {
-      result[i] = (bars[i].size as Number).toFixed(4) === (0).toFixed(4) ? 0.00001 : bars[i].size
+      result[i] =
+        (bars[i].size as Number).toFixed(4) === (0).toFixed(4)
+          ? 0.00001
+          : bars[i].size
     }
 
     return result
@@ -96,7 +117,7 @@ const StackedBarChart = ({
 
   const selectNextBar = () => {
     const barsArr = Object.values(bars)
-   
+
     const index = barsArr.findIndex((b: any) => {
       return b.token === currentBarData.token
     })
@@ -128,12 +149,12 @@ const StackedBarChart = ({
               barTotalSize === 100
                 ? `-${100 + 30}px`
                 : `-${
-                  100 +
-                  30 -
-                  (100 - barTotalSize * (height > 100 ? height / 100 : 1))
-                }px`
+                    100 +
+                    30 -
+                    (100 - barTotalSize * (height > 100 ? height / 100 : 1))
+                  }px`
             }`,
-            right: rightPixel,
+            right: rightPixel
           }}
         >
           <BarChart
