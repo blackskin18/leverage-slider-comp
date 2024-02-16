@@ -35,10 +35,10 @@ const renderBar = (
           border: '10px solid black',
           ...(barData[barDataEntriesKeys[i]].isDashed
             ? {
-                strokeDasharray: 2,
-                stroke: barData[barDataEntriesKeys[i]].color,
-                fill: 'none'
-              }
+              strokeDasharray: 2,
+              stroke: barData[barDataEntriesKeys[i]].color,
+              fill: 'none'
+            }
             : {})
         }}
         yAxisId={1000}
@@ -228,8 +228,9 @@ const Component = ({
 
   useEffect(() => {
     if (leverageData && leverageData.length > 0 && leverageData[0].bars.length > 0) {
-      setBarData(leverageData[0].bars[0])
-      setX(leverageData[0].bars[0].x)
+      const maxReserveBar = (leverageData[0].bars as any[]).sort((a, b) => Number(b.reserve) - Number(a.reserve))?.[0]
+      setBarData(maxReserveBar)
+      setX(maxReserveBar.x)
     }
   }, [leverageData])
 

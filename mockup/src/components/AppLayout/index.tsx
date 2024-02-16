@@ -9,6 +9,28 @@ const bn = BigNumber.from
 
 const LEVERAGE_DATA = [
   {
+    x: 9,
+    xDisplay: '9x',
+    totalSize: bn('0x1813e2fe4ba5869a'),
+    bars: [
+      {
+        x: 9,
+        token: '0x086D9928f862C95359C6624B74e4fEf3a9e79a74-16',
+        size: 30,
+        color: '#01A7FA',
+        reserve: 10,
+        opacity: 0.3
+      },
+      {
+        x: 9,
+        token: '0x7c4a2262C23fCc45e102BD8D0fA3541Ec544e59s-16',
+        size: 30.63,
+        color: '#FF98E5',
+        reserve: 53
+      }
+    ]
+  },
+  {
     x: 4,
     xDisplay: '4x',
     totalSize: bn('0x4dec282667716233'),
@@ -31,28 +53,7 @@ const LEVERAGE_DATA = [
       }
     ]
   },
-  {
-    x: 9,
-    xDisplay: '9x',
-    totalSize: bn('0x1813e2fe4ba5869a'),
-    bars: [
-      {
-        x: 9,
-        token: '0x086D9928f862C95359C6624B74e4fEf3a9e79a74-16',
-        size: 30.89,
-        color: '#01A7FA',
-        reserve: bn('0x1813e2fe4ba5869a'),
-        opacity: 0.3
-      },
-      {
-        x: 9,
-        token: '0x7c4a2262C23fCc45e102BD8D0fA3541Ec544e59s-16',
-        size: 30.63,
-        color: '#FF98E5',
-        reserve: bn('0x17deb0937bc9efdb')
-      }
-    ]
-  },
+ 
   {
     x: 21,
     xDisplay: '21x',
